@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  server:
+    build: .
+    environment:
+      - MONGO_URI=${MONGO_URI}
+      - MONGO_DATABASE=${MONGO_DATABASE}
+      - SERVER_PORT=${SERVER_PORT}
+    ports:
+      - "${SERVER_PORT}:${SERVER_PORT}"
+    depends_on:
+      - mongo_vkr
+    networks:
+      - vkr_network
+
+  mongo_vkr:
+    image: mongo:latest
+    ports:
+      - "27037:27017"
+    volumes:
+      - mongo_data_vkr:/data/db
+    networks:
+      - vkr_network
+
+volumes:
+  mongo_data_vkr:
+
+networks:
+  vkr_network:
+    driver: bridge
